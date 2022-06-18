@@ -1,0 +1,19 @@
+FROM public.ecr.aws/docker/library/alpine:latest
+
+RUN set -e \
+    ; printf "gitolite\n" >/etc/hostname \
+    apk upgrade --no-cache --available \
+    && apk add gitolite jq openssh-server runuser \
+    && git config --system init.defaultBranch main \
+    && sed \
+        -i \
+        -E 's/^git:!:(.*):0:99999:7:::$/git:*:\1:0:99999:7:::/g' \
+        /etc/shadow \
+    && install -o git -g git -m 0700 -d /var/lib/git/.ssh
+
+COPY --chown=root:root --chmod=0755 entrypoint.sh /usr/local/sbin/entrypoint.sh
+COPY --chown=root:root --chmod=0644 sshd_config /etc/ssh/sshd_config
+COPY --chown=root:root --chmod=0644 issue.net /etc/issue.net
+
+ENTRYPOINT ["/usr/local/sbin/entrypoint.sh"]
+CMD ["-De"]
