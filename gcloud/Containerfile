@@ -1,0 +1,7 @@
+FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
+
+RUN apk upgrade --no-cache --available \
+    && gcloud components update --quiet \
+    && gcloud components install --quiet kubectl
+
+ENTRYPOINT ["/google-cloud-sdk/bin/gcloud"]
