@@ -3,7 +3,7 @@ FROM public.ecr.aws/docker/library/alpine:latest
 RUN set -e \
     ; printf "gitolite\n" >/etc/hostname \
     apk upgrade --no-cache --available \
-    && apk add gitolite jq openssh-server runuser \
+    && apk add curl gitolite jq openssh-server runuser \
     && git config --system init.defaultBranch main \
     && sed \
         -i \
