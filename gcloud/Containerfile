@@ -2,6 +2,10 @@ FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
 
 RUN apk upgrade --no-cache --available \
     && gcloud components update --quiet \
-    && gcloud components install --quiet kubectl
+    && gcloud components install --quiet \
+        gke-gcloud-auth-plugin \
+        kubectl
+
+ENV USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
 ENTRYPOINT ["/google-cloud-sdk/bin/gcloud"]
